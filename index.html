@@ -42,22 +42,25 @@
 		const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const code = urlParams.get('code');
-		function postData(url = '', data = {}) {
-		  // Значения по умолчанию обозначены знаком *
-			return fetch(url, {
-				method: 'POST', // *GET, POST, PUT, DELETE, etc.
-				mode: 'no-cors', // no-cors, cors, *same-origin
-//				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-				credentials: 'omit', // include, *same-origin, omit
-				headers: {
-					'Content-Type': 'application/json',
-					'Accept': 'application/json'
-				},
-//				redirect: 'follow', // manual, *follow, error
-//				referrer: 'no-referrer', // no-referrer, *client
-				body: JSON.stringify(data), // тип данных в body должен соответвовать значению заголовка "Content-Type"
-			})
-			.then(response => response.json()); // парсит JSON ответ в Javascript объект
+		function requestGithubToken(tokenUrl, options) {
+		  let data = new FormData()
+		  data.append('client_id', options.client_id)
+		  data.append('client_secret', options.client_secret)
+		  data.append('code', options.code)
+		  data.append("state", options.state)
+		  
+		  return fetch("https://github.com/login/oauth/access_token", {
+			method: 'POST',
+			body: data
+		  })
+		  .then((response) => {
+			return response.text()
+		  })
+		  .then((paramsString) => {
+			let params = new URLSearchParams(paramsString)
+			console.log('access_token', params.get('access_token'))
+			return params.get('access_token');
+		  });
 		}
 		if (!code) {
 			const params = new URLSearchParams({
@@ -78,7 +81,7 @@
 				code: code,
 				state: secret_state
 			}
-			postData(tokenUrl, tokenParams)
+			requestGithubToken(tokenUrl, tokenParams)
 				.then(data => getUserData(data)) // JSON-строка полученная после вызова `response.json()`
 				.catch(error => console.error(error));
 		}
