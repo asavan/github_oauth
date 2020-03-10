@@ -51,6 +51,9 @@
 		  
 		  return fetch("https://github.com/login/oauth/access_token", {
 			method: 'POST',
+			mode: 'no-cors', // no-cors, cors, *same-origin
+//				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+			credentials: 'omit', 
 			body: data
 		  })
 		  .then((response) => {
