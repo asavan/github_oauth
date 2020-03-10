@@ -21,17 +21,17 @@
 <p>♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙</p>
 <p>♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖</p>
 <script>
-	function getUserData(oauthResp) {
-		const token = oauthResp.access_token;
+
+	function getUserData(token) {
 		fetch("https://api.github.com/user", {
-			mode: 'no-cors',
+//			mode: 'no-cors',
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': 'token ' + token,
 			},
 		})
-			.then(response => response.json())
-			.then(data => console.log(JSON.stringify(data))) 
+		.then(response => response.json())
+		.then(data => console.log(JSON.stringify(data))) 
 	}
 
 	function main() {
@@ -60,9 +60,10 @@
 			return response.text()
 		  })
 		  .then((paramsString) => {
-			let params = new URLSearchParams(paramsString)
-			console.log('access_token', params.get('access_token'))
-			return params.get('access_token');
+			console.log(paramsString);
+			const params1 = new URLSearchParams(paramsString);
+			console.log('access_token', params1.get('access_token'));
+			return params1.get('access_token');
 		  });
 		}
 		if (!code) {
