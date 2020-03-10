@@ -21,6 +21,19 @@
 <p>♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙</p>
 <p>♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖</p>
 <script>
+	function getUserData(oauthResp) {
+		const token = oauthResp.access_token;
+		fetch("https://api.github.com/user", {
+			mode: 'no-cors',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': 'token ' + token,
+			},
+		})
+			.then(response => response.json())
+			.then(data => console.log(JSON.stringify(data))) 
+	}
+
 	function main() {
 		const sec = "34dc99810e7842f68a0abb43b7fca74b552ea36d";
 		const cid = "ef25160563172c2b50ad";
@@ -33,7 +46,7 @@
 		  // Значения по умолчанию обозначены знаком *
 			return fetch(url, {
 				method: 'POST', // *GET, POST, PUT, DELETE, etc.
-//				mode: 'cors', // no-cors, cors, *same-origin
+				mode: 'no-cors', // no-cors, cors, *same-origin
 //				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 //				credentials: 'same-origin', // include, *same-origin, omit
 				headers: {
@@ -66,7 +79,7 @@
 				state: secret_state
 			}
 			postData(tokenUrl, tokenParams)
-				.then(data => console.log(JSON.stringify(data))) // JSON-строка полученная после вызова `response.json()`
+				.then(data => getUserData(data)) // JSON-строка полученная после вызова `response.json()`
 				.catch(error => console.error(error));
 		}
 	}
