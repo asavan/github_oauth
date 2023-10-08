@@ -20,6 +20,10 @@ function main() {
               client_id: cid,
               state: secret_state
         });
+        const scope = urlParams.get('scope');
+        if (scope) {
+            params.scope = scope;
+        }
         window.location.href = "https://github.com/login/oauth/authorize?" + params.toString();
     } else {
         const state = urlParams.get('state');
@@ -31,10 +35,6 @@ function main() {
         const tokenParams = {
             code: code,
             state: secret_state
-        }
-        const scope = urlParams.get('scope');
-        if (scope) {
-            tokenParams.scope = scope;
         }
         const params = new URLSearchParams(tokenParams);
         const fullUrl = tokenUrl + "?" + params.toString();
