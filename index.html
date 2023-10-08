@@ -47,14 +47,7 @@
 			const params = new URLSearchParams(tokenParams);
 			const fullUrl = tokenUrl + "?" + params.toString();
 			console.log(fullUrl);
-			fetch(fullUrl, {
-			mode: 'no-cors',
-			headers: {
-				'Content-Type': 'application/json',
-				'Accept': 'application/json'
-			}
-			})
-			.then(response => response.json())
+			fetch(fullUrl).then(response => response.json())
 			.then(data => console.log(JSON.stringify(data)));
 		}
 	}
