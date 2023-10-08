@@ -1,20 +1,18 @@
 ﻿<html>
 <head>
 <style>
-   h1 {
-    font-family: 'Times New Roman', Times, serif; /* Гарнитура текста */ 
-    font-size: 250%; /* Размер шрифта в процентах */ 
-   } 
    p {
-    font-family: Verdana, Arial, Helvetica, sans-serif; 
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
     font-size: 30pt; /* Размер шрифта в пунктах */ 
    }
   </style>
 </head>
 <body>
-<p>♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜</p>
-<p>♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟</p>
-<p>💩💩💩💩💩💩💩💩</p>
+<p>♜♞♝♛♚♝♞♜</p>
+<p>♟♟♟♟♟♟♟♟</p>
+<p>⬛▢⏹▢⏹▢◼▢</p>
 <p>💩💩💩💩💩💩💩💩</p>
 <p>💩💩💩💩💩💩💩💩</p>
 <p>💩💩💩💩💩💩💩💩</p>
@@ -22,51 +20,13 @@
 <p>♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖</p>
 <script>
 
-	function getUserData(token) {
-		fetch("https://api.github.com/user", {
-//			mode: 'no-cors',
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': 'token ' + token,
-			},
-		})
-		.then(response => response.json())
-		.then(data => console.log(JSON.stringify(data))) 
-	}
-
 	function main() {
-		const sec = "34dc99810e7842f68a0abb43b7fca74b552ea36d";
 		const cid = "ef25160563172c2b50ad";
 		const secret_state = "alco";
 		
 		const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const code = urlParams.get('code');
-		function requestGithubToken(tokenUrl, options) {
-		  let data = new FormData()
-		  data.append('client_id', options.client_id)
-		  data.append('client_secret', options.client_secret)
-		  data.append('code', options.code)
-		  data.append("state", options.state)
-		  
-		  return fetch("https://github.com/login/oauth/access_token", {
-			method: 'POST',
-			mode: 'no-cors', // no-cors, cors, *same-origin
-//				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'omit', 
-			body: data
-		  })
-		  .then((response) => {
-		    console.log(response);
-			return response.text()
-		  })
-		  .then((paramsString) => {
-			console.log(paramsString);
-			const params1 = new URLSearchParams(paramsString);
-			console.log('access_token', params1.get('access_token'));
-			return params1.get('access_token');
-		  });
-		}
 		if (!code) {
 			const params = new URLSearchParams({
 				  client_id: cid,
@@ -79,16 +39,23 @@
 				console.log("Bad state");
 				return false;
 			}
-			const tokenUrl = "https://github.com/login/oauth/access_token";
+			const tokenUrl = "https://abrasive-wave-soda.glitch.me/update";
 			const tokenParams = {
-				client_id: cid,
-				client_secret: sec,
 				code: code,
 				state: secret_state
 			}
-			requestGithubToken(tokenUrl, tokenParams)
-				.then(data => getUserData(data)) // JSON-строка полученная после вызова `response.json()`
-				.catch(error => console.error(error));
+			const params = new URLSearchParams(tokenParams);
+			const fullUrl = tokenUrl + "?" + params.toString();
+			console.log(fullUrl);
+			fetch(fullUrl, {
+			mode: 'no-cors',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json'
+			}
+			})
+			.then(response => response.json())
+			.then(data => console.log(JSON.stringify(data)));
 		}
 	}
 	main();
